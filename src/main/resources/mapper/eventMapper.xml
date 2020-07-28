@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="mybatis.eventBoard">
+
+    <insert id="create">
+    	insert into event_board (
+    		board_idx, 
+    		title, 
+    		contents,
+    		start_datetime,
+    		end_datetime,
+    		create_datetime,
+    		creator_id,
+    		deleted_yn,
+    		event_state,
+    		event_url,
+    		event_image_name,
+    		event_org_image_name,
+    		event_image_url
+    	)
+    	values (
+    		nextval('event_id_seq'),
+    		#{title},
+    		#{contents},
+    		#{startDatetime},
+    		#{endDatetime},	
+    		now(),
+    		'admin',
+    		'N',
+    		'',
+    		#{eventUrl},
+    		#{eventImageName},
+    		#{eventOrgImageName},
+    		#{eventImageUrl}
+    	)
+    	
+    </insert>
+    
+    <select id="read" resultType="com.shinsegae.admin.entity.EventBoard">
+     <![CDATA[
+    	select
+    		board_idx as boardIdx,
+    		title,
+    		contents,
+    		start_datetime as startDatetime,
+    		end_datetime as endDatetime,
+    		create_datetime as createDatetime,
+    		creator_id as creatorId,
+    		deleted_yn as deletedYn,
+    		case  when (current_date  >= start_datetime and current_date  <= end_datetime) then '진행중'
+    		      when current_date  < start_datetime  then '준비중'
+    		      when current_date  > end_datetime then '종료'
+    		     else null end as eventState,
+    		event_url as eventUrl,
+    		event_image_name as eventImageName,
+    		event_org_image_name as eventOrgImageName,
+    		event_image_url as eventImageUrl
+    	from 
+    	    event_board
+    	where board_idx = #{boardIdx}
+     ]]>  			
+    </select>
+    
+    <update id="update">
+    	update event_board set
+    		title = #{title},
+    		contents = #{contents},
+    		start_datetime = #{startDatetime},
+    		end_datetime = #{endDatetime},
+    		update_datetime = now(),
+    		event_image_name = #{eventImageName},
+    		event_org_image_name = #{eventOrgImageName},
+    		event_image_url = #{eventImageUrl}
+    		
+    	where board_idx = #{boardIdx}    		
+    </update>
+    
+     <update id="updateEmpty">
+    	update event_board set
+    		title = #{title},
+    		contents = #{contents},
+    		start_datetime = #{startDatetime},
+    		end_datetime = #{endDatetime},
+    		update_datetime = now()
+    		
+    	where board_idx = #{boardIdx}    		
+    </update>
+    
+    <delete id="delete">
+    	delete from event_board 
+    	where 
+    		board_idx = #{boardIdx}    		
+    </delete>
+    
+    <select id="listAll" resultType="com.shinsegae.admin.entity.EventBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		start_datetime as startDatetime,
+    		end_datetime as endDatetime,
+    		create_datetime as createDatetime,
+    		creator_id as creatorId,
+    		deleted_yn as deletedYn,
+    		case  when (current_date  >= start_datetime and current_date  <= end_datetime) then '진행중'
+    		      when current_date  < start_datetime  then '준비중'
+    		      when current_date  > end_datetime then '종료'
+    		     else null end as eventState,
+    		event_url as eventUrl
+    	from 
+    	    event_board
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc  
+     ]]>  		
+    </select>
+    
+    <select id="listPage" resultType="com.shinsegae.admin.entity.EventBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		start_datetime as startDatetime,
+    		end_datetime as endDatetime,
+    		create_datetime as createDatetime,
+    		creator_id as creatorId,
+    		deleted_yn as deletedYn,
+    		case  when (current_date  >= start_datetime and current_date  <= end_datetime) then '진행중'
+    		      when current_date  < start_datetime  then '준비중'
+    		      when current_date  > end_datetime then '종료'
+    		     else null end as eventState,
+    		event_url as eventUrl
+    	from 
+    	    event_board
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{page} limit 10 
+     ]]>  		
+    </select>
+    
+    <select id="listCriteria" resultType="com.shinsegae.admin.entity.EventBoard">
+    <![CDATA[
+    	select
+    	   	board_idx as boardIdx,
+    		title,
+    		contents,
+    		start_datetime as startDatetime,
+    		end_datetime as endDatetime,
+    		create_datetime as createDatetime,
+    		creator_id as creatorId,
+    		deleted_yn as deletedYn,
+    		case  when (current_date  >= start_datetime and current_date  <= end_datetime) then '진행중'
+    		      when current_date  < start_datetime  then '준비중'
+    		      when current_date  > end_datetime then '종료'
+    		     else null end as eventState,
+    		event_url as eventUrl
+    	from 
+    	    event_board 
+    	where 
+    		board_idx > 0
+        ]]>
+        <if test="searchType != null and keyword != null">
+            and title like CONCAT('%',#{keyword}, '%')
+        </if> 	  	
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{pageStart} limit #{perPageNum} 
+     	
+    </select>
+    
+     <select id="countPaging" resultType="int">
+    <![CDATA[
+    	select
+    	    count(board_idx)
+    	from 
+    	    event_board
+    	where 
+    		board_idx > 0
+     ]]>
+       <if test="searchType != null and keyword != null">
+            and title like CONCAT('%',#{keyword}, '%')
+        </if> 	  
+      		
+    </select>
+    
+
+</mapper>

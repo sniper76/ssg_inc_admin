@@ -1,0 +1,233 @@
+CREATE TABLE public.notice_board (
+	board_idx int4 NOT NULL,
+	title varchar(300) NOT NULL,
+	contents text NOT NULL,
+	hit_cnt int2 NOT NULL DEFAULT 0,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.notice_board OWNER TO postgres;
+GRANT ALL ON TABLE public.notice_board TO postgres;
+
+-- DROP SEQUENCE public.roles_role_id_seq;
+
+CREATE SEQUENCE public.notice_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;
+
+CREATE TABLE public.faq_board (
+	board_idx int4 NOT NULL,
+	title varchar(300) NOT NULL,
+	contents text NOT NULL,
+	hit_cnt int2 NOT NULL DEFAULT 0,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.faq_board OWNER TO postgres;
+GRANT ALL ON TABLE public.faq_board TO postgres;
+
+CREATE SEQUENCE public.faq_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;
+
+--drop table public.event_board;
+CREATE TABLE public.event_board (
+	board_idx int4 NOT NULL,
+	title varchar(300) NOT NULL,
+	contents text NOT NULL,
+	hit_cnt int2 NOT NULL DEFAULT 0,
+	start_datetime date NOT NULL,
+	end_datetime date NOT NULL,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) null,
+	event_state varchar(1) NOT null,
+	event_url varchar(100) null
+);
+
+drop table public.event_attach;
+CREATE TABLE public.event_attach (
+	board_idx int4 NOT NULL,
+	full_name varchar(150) NOT NULL,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.event_board OWNER TO postgres;
+GRANT ALL ON TABLE public.event_board TO postgres;
+
+ALTER TABLE public.event_attach OWNER TO postgres;
+GRANT ALL ON TABLE public.attach_board TO postgres;
+
+
+CREATE SEQUENCE public.event_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;
+
+CREATE TABLE public.cs_board (
+	board_idx int4 NOT NULL,
+	cs_title varchar(300) NOT NULL,
+	contents text NOT NULL,
+	cs_user_name varchar(50) NOT null,
+	cs_user_title varchar(50) NULL,
+	cs_user_company varchar(100)  NULL,
+	cs_user_tel varchar(100)  NULL,
+	cs_user_email varchar(100)  NULL,
+	create_datetime date NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.cs_board OWNER TO postgres;
+GRANT ALL ON TABLE public.cs_board TO postgres;
+
+CREATE SEQUENCE public.cs_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;
+
+CREATE TABLE public.main_board (
+	board_idx int4 NOT NULL,
+	title varchar(300) NOT NULL,
+	sub_title varchar(300) NOT NULL,
+	media_url varchar(100) null,
+	button_name varchar(50) NULL,
+	button_url varchar(50) null,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) null
+);
+
+CREATE TABLE public.main_attach (
+	board_idx int4 NOT NULL,
+	full_name varchar(150) NOT NULL,
+	create_datetime date NOT NULL,
+	creator_id varchar(50) NOT NULL
+);
+
+
+
+
+-- 20200301
+CREATE TABLE public.main_board (
+   board_idx int4 NOT NULL,
+   title varchar(300) NOT NULL,
+	sub_title varchar(300) NOT NULL,
+   pc_image_name varchar(100) null,
+   pc_org_image_name varchar(100) null,
+   pc_image_url  varchar(200) null,
+   mo_image_name varchar(100) null,
+   mo_org_image_name varchar(100) null,
+   mo_image_url  varchar(200) null,
+	button_name varchar(50) NULL,
+	button_url varchar(100) null,
+   create_datetime date NOT NULL,
+   creator_id varchar(50) NOT NULL,
+   update_datetime date NULL,
+   update_id varchar(50) NULL,
+   deleted_yn varchar(1) NULL
+);
+CREATE TABLE public.news_board (
+   board_idx int4 NOT NULL,
+   pc_image_name varchar(100) null,
+   pc_org_image_name varchar(100) null,
+   pc_image_url  varchar(200) null,
+   mo_image_name varchar(100) null,
+   mo_org_image_name varchar(100) null,
+   mo_image_url  varchar(200) null,
+	link_url varchar(100) null,
+   create_datetime date NOT NULL,
+   creator_id varchar(50) NOT NULL,
+   update_datetime date NULL,
+   update_id varchar(50) NULL,
+   deleted_yn varchar(1) NULL
+);
+
+-- Permissions
+
+ALTER TABLE public.main_board OWNER TO postgres;
+GRANT ALL ON TABLE public.main_board TO postgres;
+
+ALTER TABLE public.main_attach OWNER TO postgres;
+GRANT ALL ON TABLE public.main_board TO postgres;
+
+CREATE SEQUENCE public.main_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;
+
+drop table public.user;
+
+
+CREATE TABLE public.admin_user (
+	user_idx int8  NULL,
+	user_id varchar(100) NOT NULL,
+	user_password varchar(32) NOT NULL,
+	user_name" varchar(100) NULL,
+	user_email varchar(50) NULL,
+	create_datetime date NULL,
+	update_datetime date NULL,
+	updateid varchar(50) NULL
+);
+
+
+INSERT INTO public.admin_user
+(user_idx, user_id, user_password, user_name,create_datetime)
+VALUES(1, 'admin', 'C4CA4238A0B923820DCC509A6F75849B', 'admin', now());
+
+
+
+// 2020-03-15 수정
+
+CREATE TABLE public.cs_board (
+	board_idx int4 NOT NULL,
+	title varchar(300) NOT NULL,
+	contents text NOT NULL,
+	cs_user_name varchar(50) NOT NULL,
+	cs_user_title varchar(50) NULL,
+	cs_user_company varchar(100) NULL,
+	cs_user_tel varchar(100) NULL,
+	cs_user_email varchar(100) NULL,
+	create_datetime date NOT NULL,
+	update_datetime date NULL,
+	update_id varchar(50) NULL,
+	deleted_yn varchar(1) NULL,
+	board_type varchar(2) NOT NULL,
+	input_channel varchar(100) NULL,
+	CONSTRAINT cs_board_pkey PRIMARY KEY (board_idx, board_type)
+);
+
+CREATE SEQUENCE public.ps_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1;

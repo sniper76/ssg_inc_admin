@@ -1,0 +1,222 @@
+//최대 가로 사이즈
+$site_width_max: 1140px;
+
+//미디어쿼리 사이즈
+$tablet-width: 1024px;
+$mobile_width: 620px;
+
+//폰트 사이즈
+$font_base: 16px;
+$font_small: 10px;
+$font_medium: 14px;
+$font_large: 20px;
+
+//자주 쓰는 넓이
+$w200: 200px;
+
+//자주 쓰는 자간
+$letter_spacing: percentage(20px / $font_base);
+
+//자주 쓰는 높이
+$h200: 200px;
+
+//자주 쓰는 자폭
+$line_height: percentage(20px / $font_base);
+
+//파일 경로
+$img_url_comm: "/images/comm/";
+$img_url_main: "/images/main/";
+$img_url_sub: "/images/sub/";
+
+//컬러
+$color_base: #333;
+$color01: #878787;
+$color02: #e2e2e2;
+$color_link: #00c;
+$color_login_bg: #2d2d2d;
+$color_white: #fff;
+$color_black: #000;
+$color_btn: #d12f3a;
+$color_btn02: #0069d9;
+$color_depth_line: rgba(191,191,191,0.2);
+$color_con: #f1f2f7;
+
+//margin
+$margin_b70: 70px;
+$margin_t20: 20px;
+
+//padding
+$padding_t70: 20px;
+$padding_t20: 20px;
+
+//transition default time
+$transition_time : 0.5s;
+
+//border
+@mixin border(
+    $type: border,
+    $t: 1px,
+    $b: null,
+    $l: null,
+    $r: null,
+    $style: solid,
+    $radius: null,
+    $color: #333
+  ){
+    @if($type == border){
+      border: $t $style $color;
+      border-radius: $radius;
+    }@else if($type == border2){
+      border: {
+        top: $t;
+        bottom: $b;
+        left: $l;
+        right: $r;
+        style: $style;
+        radius: $radius;
+        color: $color;
+      }
+    }
+  }
+
+//position
+@mixin position(
+    $p: absolute,
+    $t: null,
+    $b: null,
+    $l: null,
+    $r: null,
+    $align: null,
+    $z_index: null
+  ){
+    position: $p;
+    top: $t;
+    bottom: $b;
+    left: $l;
+    right: $r;
+    @if($align == c){
+      transform:translate(-50%, -50%);
+    }@else if($align == h){
+      transform:translateX(-50%);
+    }@else if($align == v){
+      transform:translateY(-50%);
+    }
+    z-index:$z_index;
+  }
+
+//font
+@mixin font(
+    $style: null,
+    $weight: null,
+    $family: null,
+    $color: null,
+    $size: $font_base
+  ){
+    font:{
+      style: $style;
+      weight: $weight;
+      size: $size;
+      family: $family;
+      color: $color;
+    }
+  }
+
+//space
+@mixin space(
+    $height: $line_height,
+    $spacing: null
+  ){
+    line-height: $height;
+    letter-spacing: $spacing;
+  }
+
+//button
+@mixin button(
+    $w: 200px,
+    $h: 60px,
+    $radius: null,
+    $color: white,
+    $bg_color: #333,
+    $align: center,
+    $size: $font_base
+  ){
+    width: $w;
+    height: $h;
+    line-height: $h;
+    border-radius: $radius;
+    color: $color;
+    background-color:$bg_color;
+    text-align:$align;
+    cursor:pointer;
+    font-size: $size;
+  }
+
+//arrow
+@mixin arrow($type:null, $size:"6px", $color:"#000") {
+  width: 0;
+  height: 0;
+  $size: unquote($size);
+  $color: unquote($color);
+
+  @if $type=="up" {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-bottom: $size solid $color;
+  }
+  @elseif $type=="down" {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-top: $size solid $color;
+  }
+  @elseif $type=="left" {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+  }
+  @elseif $type=="right" {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+  @elseif $type=="downLeft" {
+    border-top: $size solid transparent;
+    border-bottom: 0 solid transparent;
+    border-left: $size solid $color;
+    border-right: 0 solid $color;
+  }
+  @elseif $type=="downRight" {
+    border-top: $size solid transparent;
+    border-bottom: 0 solid transparent;
+    border-left: 0 solid $color;
+    border-right: $size solid $color;
+  }
+  @elseif $type=="upLeft" {
+    border-top: 0 solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+    border-right: 0 solid $color;
+  }
+  @elseif $type=="upRight" {
+    border-top: 0 solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: 0 solid $color;
+    border-right: $size solid $color;
+  }
+}
+
+@mixin arrow2(
+    $w: 15px,
+    $h: 15px,
+    $bt: 2px,
+    $br: 2px,
+    $bb: 0,
+    $bl: 0,
+    $color: tomato,
+    $border_size:1px
+  ){
+    width: $w;
+    height: $h;
+    border:$border_size solid $color;
+    border-width:$bt $br $bb $bl;
+    transform: rotate(45deg);
+  }

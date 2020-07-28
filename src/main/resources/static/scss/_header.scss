@@ -1,0 +1,29 @@
+@import "variable";
+
+/* skipNav */
+#skipNav{
+  position: relative;
+  a{
+    display: inline-block;
+    @include position($t:-30px, $l:0);
+    height: 30px;
+    line-height: 30px;
+    background-color: #26292a;
+    padding: 0 25px;
+    font-size: 12px;
+    color: #fff;
+    letter-spacing: -1px;
+    &:focus{
+      overflow: hidden;
+      top: 0;
+      z-index: 101;
+      text-decoration: none;
+    }
+  }
+}
+
+/* header */
+#header {
+  width: 100%;
+  max-width: $site_width_max;
+}

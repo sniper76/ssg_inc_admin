@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="mybatis.noticeBoard">
+
+    <insert id="create">
+    	insert into notice_board (
+    		board_idx, 
+    		title, 
+    		contents,
+    		create_datetime,
+    		creator_id)
+    	values (
+    		nextval('notice_id_seq'),
+    		#{title},
+    		#{contents},
+    		now(),
+    		'admin'
+    	)
+    	
+    </insert>
+    
+    <select id="read" resultType="com.shinsegae.admin.entity.NoticeBoard">
+    	select
+    		board_idx as boardIdx,
+    		title,
+    		contents,
+    		creator_id as creatorId,
+    		create_datetime as createDatetime,
+    		hit_cnt as hitCnt
+    	from 
+    	    notice_board
+    	where board_idx = #{boardIdx}
+    		
+    </select>
+    
+    <update id="update">
+    	update notice_board set
+    		title = #{title},
+    		contents = #{contents},
+    		update_datetime = now()
+    	where board_idx = #{boardIdx}    		
+    </update>
+    
+    <delete id="delete">
+    	delete from notice_board 
+    	where 
+    		board_idx = #{boardIdx}    		
+    </delete>
+    
+    <select id="listAll" resultType="com.shinsegae.admin.entity.NoticeBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    title,
+    	    contents,
+    	    create_datetime as createDatetime,
+    	    hit_cnt as hitCnt
+    	from notice_board 
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc  
+     ]]>  		
+    </select>
+    
+    <select id="listPage" resultType="com.shinsegae.admin.entity.NoticeBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    title,
+    	    contents,
+    	    create_datetime as createDatetime,
+    	    hit_cnt as hitCnt
+    	from notice_board 
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{page} limit 10 
+     ]]>  		
+    </select>
+    
+    <select id="listCriteria" resultType="com.shinsegae.admin.entity.NoticeBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    title,
+    	    contents,
+    	    create_datetime as createDatetime,
+    	    hit_cnt as hitCnt
+        from notice_board 
+    	where 
+    		board_idx > 0
+      ]]> 
+        <if test="searchType != null and keyword != null">
+            and title like CONCAT('%',#{keyword}, '%')
+        </if> 	
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{pageStart} limit #{perPageNum} 
+    
+    </select>
+    
+     <select id="countPaging" resultType="int">
+    <![CDATA[
+    	select
+    	    count(board_idx)
+    	from notice_board 
+    	where 
+    		board_idx > 0
+     ]]> 
+        <if test="searchType != null and keyword != null">
+            and title like CONCAT('%',#{keyword}, '%')
+        </if> 	 		
+    </select>
+    
+    <update id="boardHit" parameterType="int">
+    	update notice_board set
+            hit_cnt = hit_cnt + 1
+        where board_idx = #{boardIdx}
+    </update>
+    
+
+</mapper>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="mybatis.csBoard">
+
+    <insert id="createCs1">
+    
+    	insert into cs_board (
+    		board_idx,
+    		title,
+    		contents,
+    		cs_user_name ,
+    		cs_user_title ,
+    		cs_user_company ,
+    		cs_user_tel ,
+    		cs_user_email,
+    		create_datetime as createDatetime,
+    		board_type,
+    		input_channel )
+    	values (
+    		nextval('cs_id_seq'),
+    		#{title},
+    		#{contents},
+    		#{csUserName},
+    		#{csUsertitle},
+    		#{csUserCompany},
+    		#{csUserTel},
+    		#{csUserEmail},
+    		now(),
+    		#{boardType),
+    		'1'
+    			
+    	)
+    	
+    </insert>
+    
+     <insert id="createCs2">
+    	insert into cs_board (
+    		board_idx,
+    		title,
+    		contents,
+    		cs_user_name ,
+    		cs_user_title ,
+    		cs_user_company ,
+    		cs_user_tel ,
+    		cs_user_email,
+    		create_datetime as createDatetime,
+    		board_type,
+    		input_channel )
+    	values (
+    		nextval('ps_id_seq'),
+    		#{title},
+    		#{contents},
+    		#{csUserName},
+    		#{csUsertitle},
+    		#{csUserCompany},
+    		#{csUserTel},
+    		#{csUserEmail},
+    		now(),
+    		#{boardType),
+    		'2'
+    			
+    	)
+    	
+    </insert>
+    
+    <select id="readCs1" resultType="com.shinsegae.admin.entity.CsBoard">
+    	select
+    		board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime,
+    		board_type as boardType,
+    		input_channel as inputChannel
+    	from 
+    	    cs_board
+    	where board_idx = #{boardIdx} 
+    	  and board_type = '1'
+    		
+    </select>
+    
+    <select id="readCs2" resultType="com.shinsegae.admin.entity.CsBoard">
+    	select
+    		board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime,
+    		board_type as boardType,
+    		input_channel as inputChannel
+    	from 
+    	    cs_board
+    	where board_idx = #{boardIdx} 
+    	  and board_type = '2'
+    		
+    </select>
+    
+    <update id="update">
+    	update cs_board set
+    		title = #{title},
+    		contents = #{contents}
+    		update_datetime = now()
+    	where board_idx = #{boardIdx} 
+    	  and board_type = #{boardType}   		
+    </update>
+    
+    <delete id="deleteCs1">
+    	delete from cs_board 
+    	where 
+    		board_idx = #{boardIdx}  
+    	  and 
+    	    board_type= '1'  		
+    </delete>
+    
+     <delete id="deleteCs2">
+    	delete from cs_board 
+    	where 
+    		board_idx = #{boardIdx}  
+    	  and 
+    	    board_type= '2'  		
+    </delete>
+    
+    <select id="listAll" resultType="com.shinsegae.admin.entity.CsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime
+    	from 
+    	    cs_board
+    	where 
+    		board_idx > 0
+          and
+            board_type = #{boardType}
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc  
+     ]]>  		
+    </select>
+    
+    <select id="listPage" resultType="com.shinsegae.admin.entity.CsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime
+    	from 
+    	    cs_board
+    	where 
+    		board_idx > 0
+    		and board_type = #{boardType}
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{page} limit 10 
+     ]]>  		
+    </select>
+    
+    <select id="listCriteriaCs1" resultType="com.shinsegae.admin.entity.CsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime
+    	from 
+    	    cs_board 
+    	where 
+    		board_idx > 0
+    		and board_type = '1'
+    	  ]]> 
+    	 <if test="searchType != null"> 
+       <if test="searchType =='t'.toString()">
+            and title like CONCAT('%',#{keyword}, '%')
+       	</if> 
+       	<if test="searchType == 'n'.toString()">
+            and cs_user_name like CONCAT('%',#{keyword}, '%')
+       	</if>
+       	<if test="searchType == 'c'.toString()">
+            and cs_user_company like CONCAT('%',#{keyword}, '%')
+       	</if>
+     </if>	   			 		
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{pageStart} limit #{perPageNum} 		
+    </select>
+    
+     <select id="countPagingCs1" resultType="int">
+    <![CDATA[
+    	select
+    	    count(board_idx)
+    	from 
+    	    cs_board
+    	where 
+    		board_idx > 0
+    		and board_type = '1'
+     ]]> 
+       <if test="searchType != null"> 
+       <if test="searchType =='t'.toString()">
+            and title like CONCAT('%',#{keyword}, '%')
+       	</if> 
+       	<if test="searchType == 'n'.toString()">
+            and cs_user_name like CONCAT('%',#{keyword}, '%')
+       	</if>
+       	<if test="searchType == 'c'.toString()">
+            and cs_user_company like CONCAT('%',#{keyword}, '%')
+       	</if>
+     </if>	   		     	   	 		
+    </select>
+    
+      <select id="listCriteriaCs2" resultType="com.shinsegae.admin.entity.CsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    		title,
+    		contents,
+    		cs_user_name as csUserName,
+    		cs_user_title as csUserTitle,
+    		cs_user_company as csUserCompany,
+    		cs_user_tel as csUserTel,
+    		cs_user_email as csUserEmail,
+    		create_datetime as createDatetime
+    	from 
+    	    cs_board 
+    	where 
+    		board_idx > 0
+    		and board_type = '2'
+    	  ]]>  
+        <if test="searchType != null"> 
+       <if test="searchType =='t'.toString()">
+            and title like CONCAT('%',#{keyword}, '%')
+       	</if> 
+       	<if test="searchType == 'n'.toString()">
+            and cs_user_name like CONCAT('%',#{keyword}, '%')
+       	</if>
+       	<if test="searchType == 'c'.toString()">
+            and cs_user_company like CONCAT('%',#{keyword}, '%')
+       	</if>
+         </if>	   					
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{pageStart} limit #{perPageNum} 		
+    </select>
+    
+     <select id="countPagingCs2" resultType="int">
+    <![CDATA[
+    	select
+    	    count(board_idx)
+    	from 
+    	    cs_board
+    	where 
+    		board_idx > 0
+    		and board_type = '2'
+     ]]>
+     <if test="searchType != null"> 
+       <if test="searchType =='t'.toString()">
+            and title like CONCAT('%',#{keyword}, '%')
+       	</if> 
+       	<if test="searchType == 'n'.toString()">
+            and cs_user_name like CONCAT('%',#{keyword}, '%')
+       	</if>
+       	<if test="searchType == 'c'.toString()">
+            and cs_user_company like CONCAT('%',#{keyword}, '%')
+       	</if>
+     </if>	   		 		
+    </select>
+    
+
+</mapper>

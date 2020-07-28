@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="mybatis.newsBoard">
+
+    <insert id="create" parameterType="com.shinsegae.admin.entity.NewsBoard">
+    	insert into news_board (
+    		board_idx, 
+    		pc_image_name ,
+    		pc_org_image_name ,
+    		pc_image_url ,
+    		mo_image_name,
+    		mo_org_image_name,
+    		mo_image_url,
+    		link_url,
+    		create_datetime,
+    		creator_id)
+    	values (
+    		nextval('news_id_seq'),
+    		#{pcImageName},
+    		#{pcOrgImageName},
+    		#{pcImageUrl},
+    		#{moImageName},
+    		#{moOrgImageName},
+    		#{moImageUrl},
+    		#{linkUrl},
+    		now(),
+    		'admin'
+    	)
+    	
+    </insert>
+    
+    <select id="read" resultType="com.shinsegae.admin.entity.NewsBoard">
+    	select
+    		board_idx as boardIdx, 
+    		pc_image_name as pcImageName,
+    		pc_org_image_name as pcOrgImageName,
+    		pc_image_url as pcImageUrl,
+    		mo_image_name as moImageName,
+    		mo_org_image_name as moOrgImageName,
+    		mo_image_url as moImageUrl,
+    		link_url as linkUrl,
+    		create_datetime,
+    		creator_id
+    	from 
+    	    news_board
+    	where board_idx = #{boardIdx}
+    		
+    </select>
+    
+    <update id="update" parameterType="com.shinsegae.admin.entity.NewsBoard">
+    	update news_board set
+    		pc_image_name = #{pcImageName},
+    		<if test="pcOrgImageName != null and pcOrgImageName != ''">
+    		pc_org_image_name = #{pcOrgImageName},
+    		</if>
+    		pc_image_url = #{pcImageUrl},
+    		mo_image_name = #{moImageName},
+    		<if test="moOrgImageName != null and moOrgImageName != ''">
+    		mo_org_image_name = #{moOrgImageName},
+    		</if>
+    		mo_image_url = #{moImageUrl},
+    		link_url = #{linkUrl},
+    		update_datetime = now()
+    	where board_idx = #{boardIdx}    		
+    </update>
+    
+    <delete id="delete" parameterType="java.lang.Integer">
+    	delete from news_board 
+    	where 
+    		board_idx = #{boardIdx}    		
+    </delete>
+    
+    <select id="listAll" resultType="com.shinsegae.admin.entity.NewsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    pc_image_name as pcImageName,
+    	    pc_org_image_name as pcOrgImageName,
+    		replace(pc_image_url, '\', '/') as pcImageUrl,
+    		mo_image_name as moImageName,
+    	    mo_org_image_name as moOrgImageName,
+    		replace(mo_image_url, '\', '/') as moImageUrl,   
+    		link_url as linkUrl,   
+    	    create_datetime as createDatetime
+    	from 
+    	    news_board
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc  
+     ]]>  		
+    </select>
+    
+    <select id="listPage" resultType="com.shinsegae.admin.entity.NewsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    title,
+    	  	pc_image_name as pcImageName,
+    		pc_image_url as pcImageUrl,
+    		mo_image_name as moImageName,
+    		mo_image_url as moImageUrl,
+    	    create_datetime as createDatetime
+    	   
+    	from 
+    	    news_board
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{page} limit 10 
+     ]]>  		
+    </select>
+    
+    <select id="listCriteria" resultType="com.shinsegae.admin.entity.NewsBoard">
+    <![CDATA[
+    	select
+    	    board_idx as boardIdx,
+    	    title,
+    	   
+    	    create_datetime as createDatetime,
+    	    hit_cnt as hitCnt
+    	from 
+    	   news_board
+    	where 
+    		board_idx > 0
+    	order by
+    	    board_idx desc,
+    	    create_datetime desc 
+    	offset #{pageStart} limit #{perPageNum} 
+     ]]>  		
+    </select>
+    
+     <select id="countPaging" resultType="int">
+    <![CDATA[
+    	select
+    	    count(board_idx)
+    	from 
+    	    news_board
+    	where 
+    		board_idx > 0
+     ]]>  		
+    </select>
+    
+
+</mapper>

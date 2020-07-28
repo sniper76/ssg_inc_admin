@@ -1,0 +1,555 @@
+@import "variable";
+//형태_의미_상태
+
+//줄바꿈
+.wd{
+  &_bk_nm{word-break:normal;} //브라우저에 설정된 기본값
+  &_bk_ba{word-break:break-all;} //단어가 아닌 요소의 크기에 맞추어 줄바꿈, 보통 이값을 많이 사용
+  &_bk_ka{word-break:keep-all;} //스페이스바 나 탭 또는 엔터로 띄운 단어를 기준으로 자름
+  &_wp_bw{word-wrap:break-word;} //텍스트가 넘칠경우 단어를 기준으로 자른
+};
+
+//정렬
+.al{
+  &_l{text-align:left;} //좌측 정렬
+  &_c{text-align:center;} //중앙 정렬
+  &_r{text-align:right;} //우측 정렬
+  &_j{text-align:justify;} //양쪽 정렬
+};
+
+//대,소문자
+.en{
+  &_lo{text-transform:lowercase;} //모든 글자 소문자
+  &_up{text-transform:uppercase;} //모든 글자 대문자
+  &_ca{text-transform:capitalize;} //단어 첫번째 글자 대문자
+};
+
+//폰트 서체
+.fnt{
+  &_noto{font-family:'Noto Sans KR', sans-serif;}
+  &_open{font-family:'Open Sans', sans-serif;}
+}
+
+//폰트 굵기
+.fnt_w{
+  &_100{font-weight:100;}
+  &_900{font-weight:900;}
+  &_l{font-weight:lighter;}
+  &_n{font-weight:normal;}
+  &_b{font-weight:bold;}
+};
+
+//제목
+h{
+  &1{@include font(); word-break:keep-all}
+  &2{word-break:keep-all}
+  &3{word-break:keep-all}
+  &4{word-break:keep-all}
+  &5{word-break:keep-all}
+  &6{word-break:keep-all}
+}
+
+//본문
+p{word-break:keep-all;}
+
+//인풋
+.inp_ch{ //실제 체크박스는 화면에서 숨김
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+  +label{
+    display:inline-block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    font-size:14px;
+    color:$color01;
+    &::before{ // 가짜 체크박스
+      content: ' ';
+      display: inline-block;
+      width: 16px; //체크박스의 너비를 지정
+      height: 16px; //체크박스의 높이를 지정
+      line-height: 13px; //세로정렬을 위해 높이값과 일치
+      margin: -2px 8px 0 0;
+      text-align: center;
+      vertical-align: middle;
+      background: transparent;
+      border: 1px solid #ced4da;
+      border-radius: 2px;
+    }
+  }
+  &:checked + label::before { //체크박스를 체크했을때
+    content: '\2714';
+    font-size: 10px;
+    padding-left: 1px;
+    background-position:-49px -4px;
+  }
+}
+.inp_ra{
+  @extend .inp_ch;
+  +label{
+    &::before{
+      border-radius:50%;
+    }
+  }
+}
+.inp_txt{
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  &:focus{
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+}
+.inp_txt02{
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+.inp_file{
+  width: 100%;
+  height: 100%;
+  opacity:0;
+  cursor: pointer;
+}
+
+.inp_ch_label{
+  display:inline-block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  font-size:14px;
+  color:$color01;
+  &::before{ // 가짜 체크박스
+    content: ' ';
+    display: inline-block;
+    width: 16px; //체크박스의 너비를 지정
+    height: 16px; //체크박스의 높이를 지정
+    line-height: 13px; //세로정렬을 위해 높이값과 일치
+    margin: -2px 8px 0 0;
+    text-align: center;
+    vertical-align: middle;
+    background: transparent;
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+  }
+}
+.inp_ch_obj{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
+
+.inp_ch_label.inp_ch_on:before{
+  content: '\2714';
+  font-size: 10px;
+  padding-left: 1px;
+  background-position:-49px -4px;
+}
+
+//셀렉트 박스
+.select_wrap{width:130px; margin-right: 10px;}
+.select{
+  width: 100%; /* 원하는 너비설정 */
+  height: 38px;
+	padding:5px 10px; /* 여백으로 높이 설정 */
+	font-family: inherit;  /* 폰트 상속 */
+	background: url('../../images/comm/select_arrow.png') no-repeat 95% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
+	border: 1px solid #ced4da;
+	color:#495057;
+	border-radius: .25rem; /* iOS 둥근모서리 제거 */
+	-webkit-appearance: none; /* 네이티브 외형 감추기 */
+	-moz-appearance: none;
+	appearance: none;
+  &::-ms-expand{display: none;}
+}
+
+//버튼
+.btn_type01{
+  @include button($w:100%, $h:50px, $bg_color:$color_btn);
+  border: 0;
+  border-radius: 2px;
+}
+
+//인풋 파일 찾기 버튼
+.btn_find{
+  display: inline-block;
+  @include position($b:0, $r:0);
+  width: 120px;
+  height: 100%;
+  color: $color_base;
+  text-align: center;
+  a{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: $color01;
+    color: $color_white;
+    span{
+      @include position($t:50%, $l:50%, $align:c);
+    }
+  }
+}
+
+//공통 사이즈
+.con_siz{max-width:$site_width_max; margin:0 auto;}
+
+//dim
+.dim{
+  &_con{@include position($t: 50%, $l: 50%, $align: c, $z_index: 500);}
+  &_bg{@include position(fixed, $t: 0, $b: 0, $l: 0, $r: 0, $z_index: 500); background-color:rgba(0,0,0,0.8)}
+}
+
+//blind
+.blind{
+  display:none;
+  visibility:hidden;
+  overflow:hidden;
+  position:absolute;
+  z-index:-1;
+  width:0;
+  height:0;
+  margin:0;
+  padding:0;
+  font-size:0;
+  line-height:0;
+  text-indent:-9999em;
+  outline:none;
+}
+
+//float - clear, left, right
+.flt{
+  &_clr{&::after{content:''; clear:both; display:block;}}
+  &_l{float:left;}
+  &_r{float:right;}
+}
+
+//이미지 기본 옵션
+.img_option{
+  background: {
+    size: cover;
+    position: center;
+    repeat: no-repeat;
+  }
+}
+
+//pc, mobile 구분
+.screen{
+  &_pc{display:block !important;} //pc 버전
+  &_mb{display:none !important;} //mobile 버전
+}
+
+/* arrow < > */
+.arrow1{
+  &_u{@include arrow("up");}
+  &_d{@include arrow("down");}
+  &_l{@include arrow("left");}
+  &_r{@include arrow("right");}
+  &_d{@include arrow("downLeft");}
+  &_dr{@include arrow("downRight");}
+  &_ul{@include arrow("upLeft", "50px", "#c92228");}
+  &_ur{@include arrow("upRight");}
+}
+
+/* arrow >> */
+.arrow2{
+  @include arrow2($bt:1px, $br:1px);
+
+  &::after{
+    content: '';
+    display: block;
+    @include arrow2($bt:1px, $br:1px);
+    transform: translate(5px, -6px);
+  }
+}
+
+/* arrow -> */
+.arrow3{
+    position: relative;
+  	height: 0px; width: 0px;
+  	border: 12px solid;
+  	border-color: darkcyan darkcyan transparent	transparent;
+  	transform: rotate(45deg);
+  &::before{
+    content: '';
+    position: absolute;
+    top: 0px; right: 0px;
+    display: block;
+    height: 12px; width: 16px;
+    background-color: darkcyan;
+    transform:
+    rotate(-45deg)
+    translate(2px, 1px);
+  }
+}
+
+/* hamburger icon */
+.btn_hamburger{
+  width: auto;
+  margin: 0 auto;
+  transition: all .7s ease;
+  cursor: pointer;
+  .bar{
+    width: 50px;
+    height: 5px;
+    background-color: #6FFFE9;
+    margin:10px auto;
+    transition: all .7s ease;
+    display: block;
+  }
+  &:hover{
+    .bar{
+      background-color: #f92c8c;
+    }
+    .top{transform: translateY(15px) rotateZ(45deg);}
+    .middle{width: 0;}
+    .bottom{transform: translateY(-15px) rotateZ(-45deg);}
+  }
+}
+
+/* plus icon */
+.btn_plus{
+  width:24px;
+  height:24px;
+  position:relative;
+  display:block;
+  margin:0 auto;
+  margin-top:18px;
+
+  &::before, &::after{
+    content:'';
+    position:absolute;
+    background-color:#000;
+    transition:transform 0.25s ease-out;
+  }
+  &::before{
+    width:2px;
+    height:100%;
+    top:0;
+    left:50%;
+    margin-left:-1px;
+  }
+  &::after{
+    width:100%;
+    height:2px;
+    top:50%;
+    left:0;
+    margin-top:-1px;
+  }
+  @if(true){
+    &:hover{
+      cursor:pointer;
+      &::before{transform:rotate(90deg);}
+      &::after{transform:rotate(180deg);}
+    }
+  }
+}
+
+/* 한줄일 때 말줄임표 */
+.txt_over{white-space:nowrap; overflow:hidden;	text-overflow:ellipsis;}
+
+/* 두 줄 이상일 경우 */
+.txt_multi{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:2; /* 라인수 */
+  -webkit-box-orient:vertical;
+  word-wrap:break-word;
+  line-height:1.6em;
+  height:3.2em;
+}
+
+/* div table */
+.table_wrap{
+  &~.table_wrap{margin-top: 30px;}
+  .tit{
+    position: relative;
+    padding: 20px 30px;
+    background-color: rgba(0, 0, 0, 0.03);
+    @include border($type:border2, $t:1px, $r:1px, $b:0, $l:1px, $color:#ced4da);
+    font-size: $font_base;
+    i{
+      @include position($t:50%, $r:30px, $align:v);
+      cursor: pointer;
+      img{
+        width: 16px;
+      }
+    }
+  }
+  .table{
+    display:table;
+    width:100%;
+    @include border($color:#ced4da);
+    border-radius: 2px;
+    border-bottom:none;
+    text-align:center;
+  }
+  .thead{
+    display:table;
+    width:100%;
+    background-color: $color_con;
+  }
+  .tbody{
+    display:table;
+    width:100%;
+  }
+  .row{display:table-row;}
+  .cell{
+    display:table-cell;
+    height:50px;
+    padding: 10px 15px;
+    @include border($type:border2, $t:0, $r:1px, $b:1px, $l:0, $color:#ced4da);
+    vertical-align: middle;
+    //&:last-child{border-right:none;}
+    &.w1{width:7%;}
+    &.w2{width:7%;}
+    &.w3{}
+    &.w4{width:15%;}
+    &.w5{width:10%;}
+    &.w6{width:10%;}
+  }
+}
+
+.input_file_massk{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  .file_comm{
+    @include position($t:0, $l:0, $z-index:10);
+  }
+}
+
+/* btn_wrap */
+.btn_wrap{
+  position: relative;
+  height: 40px;
+  margin-top: 10px;
+  .btn_comm{
+    position: absolute;
+    top:0;
+    border:0;
+    width: 100px;
+    height: 100%;
+    color: $color_white;
+    border-radius: 2px;
+    &.btn_delete{
+      left: 0;
+      background-color: $color_btn;
+    }
+    &.btn_upload{
+      right: 0;
+      background-color: $color_btn02;
+    }
+    &.btn_list{
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: $color_login_bg;
+    }
+    &.btn_check{
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: $color01;
+    }
+  }
+}
+
+/* paging */
+.paging_box{
+  margin-top: 20px;
+  ul.paging_list{
+    display: inline-block;
+    li{
+      float: left;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      cursor: pointer;
+      &.btn_num_on{
+        background-color: $color01;
+        color: $color_white;
+      }
+      &.btn_arrow{
+        margin-right: -1px;
+        @include border($color:#ccc);
+        font-size: 0;
+        &.btn_prev{
+          margin-right: 7px;
+        }
+        &.btn_next{
+          margin-left: 7px;
+          img{transform: rotate(180deg);}
+        }
+        &.btn_next_all{
+          img{transform: rotate(180deg);}
+        }
+        img{
+          margin-top: -1px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+/* 상태(준비중, 진행중, 종료) */
+.Preparing{color: #ff0000;}
+.ongoing{color: #00bb00;}
+
+.detail_view{cursor: pointer;}
+
+//textarea
+textarea{
+  width: 100%;
+  min-height: 495px;
+  line-height: 1.75;
+  padding: 20px;
+  border: 0;
+  resize: none;
+}
+
+//input 컨트롤
+::placeholder{color:#bfbfcd;}
+::webkit-input-placeholder{color:#bfbfcd;}
+:-ms-input-placeholder{color:#bfbfcd;}
+:-moz-placeholder{color:#bfbfcd;}
+
+@media(max-width:1024px){/*1024px 미디어 시작*/
+  .screen{
+    &_pc{display:none !important;} //pc 버전
+    &_mb{display:block !important;} //mobile 버전
+  }
+}/*1024px 미디어 끝*/
